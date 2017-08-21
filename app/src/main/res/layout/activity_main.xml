@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.enation.javashop.android.loggerdemo.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"/>
+
+    <Button
+        android:id="@+id/printE"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_width="200dp"
+        android:text="Printerror"
+        android:textColor="@color/colorAccent"
+        android:layout_height="40dp"/>
+    <Button
+        android:layout_marginBottom="40dp"
+        android:layout_above="@id/printE"
+        android:id="@+id/printD"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_width="200dp"
+        android:text="Printdebug"
+        android:layout_height="40dp"/>
+
+    <Button
+        android:layout_marginBottom="40dp"
+        android:layout_above="@id/printD"
+        android:id="@+id/printI"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_width="200dp"
+        android:text="Printinfo"
+        android:layout_height="40dp"/>
+    <Button
+        android:id="@+id/Delete"
+        android:layout_below="@id/printE"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_width="200dp"
+        android:text="DELETE_CACHE"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_height="40dp"/>
+</RelativeLayout>
