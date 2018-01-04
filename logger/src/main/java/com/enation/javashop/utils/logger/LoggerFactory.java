@@ -7,12 +7,18 @@ import android.content.Context;
  */
 
 public class LoggerFactory {
+
     private static LogImpl LOGGER;
 
     public static LoggerConfig create(Context context){
         if (LOGGER == null){
             LOGGER = new LogImpl();
+            LOGGER.init(context);
         }
-        return LOGGER.init(context);
+        return LOGGER;
+    }
+
+    public static Logger getLogger(){
+        return LOGGER;
     }
 }
