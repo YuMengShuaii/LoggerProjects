@@ -1,6 +1,7 @@
 package com.enation.javashop.utils.logger;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +21,12 @@ public class DiskCache implements Cache {
      */
     private SimpleDateFormat dateFormat ;
 
+    private final long FILE_MAX_SIZE = 1024*1024*100;
+
     /**
      * 文件打开模式 可写可读 写完立即存盘
      */
-    private String FILEMODE = "rwd";
+    private final String FILEMODE = "rwd";
 
     /**
      * Logger本地化文件路径
@@ -125,9 +128,14 @@ public class DiskCache implements Cache {
             public void run() {
                 try {
                     if (!loggerPath.exists()) loggerPath.mkdirs();
-                    if (!loggerFile.exists()) loggerFile.createNewFile();
+                    if (!loggerFile.exists()) {
+                        loggerFile.createNewFile();
+                    }else if (loggerFile.length()>FILE_MAX_SIZE){
+                        loggerFile.delete();
+                        loggerFile.createNewFile();
+                    }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("LogUtils","本地化文件创建失败");
                 }
             }
         });
