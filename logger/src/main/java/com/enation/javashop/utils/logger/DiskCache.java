@@ -36,12 +36,18 @@ public class DiskCache implements Cache {
     /**
      * Logger本地文件名
      */
-    private String filename = "Logger.txt";
+    private final String InfoFileName = "LoggerInfo.txt";
+
+    private final String ErrorFileName = "LoggerError.txt";
+
+    private final String DebugFileName = "LoggerDebug.txt";
 
     /**
      * LoggerLocalFile
      */
-    private File loggerFile;
+    private File infoLoggerFile;
+    private File errorLoggerFile;
+    private File debugLoggerFile;
 
     /**
      * 处理IO任务的定长线程池 节省资源占用
@@ -55,7 +61,9 @@ public class DiskCache implements Cache {
     public DiskCache(Context context) {
         this.threadPool = Executors.newFixedThreadPool(1);
         this.loggerPath = new File(context.getExternalCacheDir().getPath() + "/Log/");
-        this.loggerFile = new File(loggerPath, filename);
+        this.infoLoggerFile = new File(loggerPath, InfoFileName);
+        this.errorLoggerFile = new File(loggerPath, ErrorFileName);
+        this.debugLoggerFile = new File(loggerPath, DebugFileName);
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     }
 
@@ -70,6 +78,18 @@ public class DiskCache implements Cache {
             public void run() {
                 try {
                     checkFile();
+                    File loggerFile = null;
+                    switch (type){
+                        case LogType.DEBUG:
+                            loggerFile  = debugLoggerFile;
+                            break;
+                        case LogType.INFO:
+                            loggerFile  = infoLoggerFile;
+                            break;
+                        case LogType.ERROR:
+                            loggerFile  = errorLoggerFile;
+                            break;
+                    }
                     RandomAccessFile raf = new RandomAccessFile(loggerFile, FILEMODE);
                     raf.seek(loggerFile.length());
                     raf.write(mosaic(type,tag,content).getBytes());
@@ -114,30 +134,39 @@ public class DiskCache implements Cache {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
-                loggerFile.delete();
+                errorLoggerFile.delete();
+                debugLoggerFile.delete();
+                infoLoggerFile.delete();
             }
         });
     }
 
     /**
-     * 检查文件是否存在 没有则创建
+     * 检查文件是否存在
      */
     private void checkFile() {
-        threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
                 try {
                     if (!loggerPath.exists()) loggerPath.mkdirs();
-                    if (!loggerFile.exists()) {
-                        loggerFile.createNewFile();
-                    }else if (loggerFile.length()>FILE_MAX_SIZE){
-                        loggerFile.delete();
-                        loggerFile.createNewFile();
-                    }
+                    checkLogerFile(errorLoggerFile);
+                    checkLogerFile(debugLoggerFile);
+                    checkLogerFile(infoLoggerFile);
                 } catch (IOException e) {
                     Log.e("LogUtils","本地化文件创建失败");
                 }
-            }
-        });
     }
+
+    /**
+     * 检查文件是否存在 没有则创建
+     * @param loggerFile   日志文件
+     * @throws IOException IO异常
+     */
+    private void checkLogerFile(File loggerFile) throws IOException {
+        if (!loggerFile.exists()) {
+            loggerFile.createNewFile();
+        }else if (loggerFile.length()>FILE_MAX_SIZE){
+            loggerFile.delete();
+            loggerFile.createNewFile();
+        }
+    }
+
 }
