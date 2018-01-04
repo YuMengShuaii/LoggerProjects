@@ -1,6 +1,6 @@
 package com.enation.javashop.utils.logger;
 
-import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -33,7 +33,7 @@ public class Logger {
      * @param isToLocal 是否开启本地序列化
      * @param mcache    日志本地化接口
      */
-    public static void LoggerInit(Activity context, boolean isToLocal, Cache mcache) {
+    public static void LoggerInit(Context context, boolean isToLocal, Cache mcache) {
         isOpenLogger = true;
         if (isToLocal) {
             if (mcache == null) {
@@ -50,7 +50,7 @@ public class Logger {
      * @param context   上下文
      * @param isToLocal 是否开启本地序列化
      */
-    public static void LoggerInit(Activity context, boolean isToLocal) {
+    public static void LoggerInit(Context context, boolean isToLocal) {
         LoggerInit(context, isToLocal, null);
     }
 
